@@ -15,6 +15,8 @@ protocol LocalStorageSubcriber: class {
 
 protocol LocalStorage: class {
     
+    func delete(id: UUID)
+    
     func save(items: [Country])
     
     func load(predicate: NSPredicate, sortKeyPath: String, count: Int, queue: DispatchQueue, completion: @escaping ([Country]) -> Void)
@@ -28,6 +30,18 @@ class LocalStorageImpl: LocalStorage {
     func subscribe(subscriber: LocalStorageSubcriber) {        
         self.subscriber = subscriber
         subscribe()
+    }
+    
+    
+    func delete(id: UUID) {
+        performAsync { realm in
+            guard let object = realm.object(ofType: CountryEntity.self, forPrimaryKey: id.uuidString) else {
+                return
+            }
+            try! realm.write {
+                realm.delete(object)
+            }
+        }
     }
     
     
@@ -80,8 +94,15 @@ class LocalStorageImpl: LocalStorage {
                 return
             }
             let results = realm.objects(CountryEntity.self)
-            strong.token = results.observe { [weak self] _ in
-                self?.subscriber?.onDataDidChange()
+            strong.token = results.observe { [weak self] changes in
+                switch changes {
+                case .initial:
+                    return
+                case .error(let error):
+                    fatalError("\(error)")
+                default:
+                    self?.subscriber?.onDataDidChange()
+                }
             }
         }
     }

@@ -8,7 +8,8 @@
 
 import UIKit
 
-struct ListItemCellModel {
+struct CountryCellModel {
+    let id: UUID
     let sortId: Int
     let name: String
     let time: String
@@ -16,18 +17,18 @@ struct ListItemCellModel {
 }
 
 
-protocol ListView: class {
+protocol CountryListView: class {
     func render()
 }
 
 
-class ListViewController: UITableViewController {
+class CountryListViewController: UITableViewController {
     
     class var identifier: String {
         return String(describing: self)
     }
     
-    var presenter: ListPresenter!
+    var presenter: CountryListPresenter!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +63,12 @@ class ListViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            presenter.delete(idx: indexPath.row)            
+        }
+    }
+    
     // MARK: -Private
     private lazy var loadingView: UIView = {
         let spinner = UIActivityIndicatorView(style: .gray)
@@ -72,7 +79,7 @@ class ListViewController: UITableViewController {
 }
 
 
-extension ListViewController: ListView {
+extension CountryListViewController: CountryListView {
     func render() {
         tableView.reloadData()
         loadingView.isHidden = !presenter.hasMore

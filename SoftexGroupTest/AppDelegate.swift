@@ -27,9 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let networkService: NetworkService = NetworkServiceImpl()
         let localStorage: LocalStorage = LocalStorageImpl()
         
-        let listViewController = storyboard.instantiateViewController(withIdentifier: ListViewController.identifier) as! ListViewController        
+        let listViewController = storyboard.instantiateViewController(withIdentifier: CountryListViewController.identifier) as! CountryListViewController        
         
-        let presenter: ListPresenter = ListPresenterImpl(
+        let presenter: CountryListPresenter = CountryListPresenterImpl(
             view: listViewController,
             networkService: networkService,
             localStorage: localStorage

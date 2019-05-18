@@ -20,7 +20,7 @@ class ListItemTableViewCell: UITableViewCell {
     @IBOutlet var nameToImageContraint: NSLayoutConstraint!
     @IBOutlet var nameLeadingToSuperviewMarginConstraint: NSLayoutConstraint!
     
-    func setup(model: ListItemCellModel) {
+    func setup(model: CountryCellModel) {
         imageFuture?.cancel()
         imageFuture = model.image
         

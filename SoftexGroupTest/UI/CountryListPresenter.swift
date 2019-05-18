@@ -9,7 +9,7 @@
 import Kingfisher
 
 
-protocol ListPresenter: class {
+protocol CountryListPresenter: class {
     /// Загрузить следующую страницу
     func loadNextPage()
     
@@ -20,22 +20,50 @@ protocol ListPresenter: class {
     ///
     /// - Parameter row: индекс
     /// - Returns: модель ячейки
-    func getItem(at row: Int) -> ListItemCellModel
+    func getItem(at row: Int) -> CountryCellModel
     
     /// Признак — есть ли еще данные для загрузки
     var hasMore: Bool { get }
+    
+    /// Удалить объект
+    ///
+    /// - Parameter id: индекс объекта
+    func delete(idx: Int)
 }
 
 
-class ListPresenterImpl: ListPresenter {
+class CountryListPresenterImpl: CountryListPresenter {
     
-    init(view: ListView, networkService: NetworkService, localStorage: LocalStorage) {
+    init(view: CountryListView, networkService: NetworkService, localStorage: LocalStorage) {
         self.networkService = networkService
         self.localStorage = localStorage
         self.view = view
         
         localStorage.subscribe(subscriber: self)
     }
+    
+    
+    // MARK: -ListPresenter
+    var hasMore: Bool {
+        return hasMoreServer || hasMoreDB
+    }
+    
+    
+    func getItem(at row: Int) -> CountryCellModel {
+        return items[row]
+    }
+    
+    
+    var itemsCount: Int {
+        return items.count
+    }
+    
+    
+    func delete(idx: Int) {
+        let country = items[idx]
+        localStorage.delete(id: country.id)
+    }
+    
     
     func loadNextPage() {
         guard hasMore else {
@@ -56,19 +84,6 @@ class ListPresenterImpl: ListPresenter {
         }
     }
     
-    // MARK: -ListPresenter
-    var hasMore: Bool {
-        return hasMoreServer || hasMoreDB
-    }
-    
-    func getItem(at row: Int) -> ListItemCellModel {
-        return items[row]
-    }
-    
-    var itemsCount: Int {
-        return items.count
-    }
-    
     // MARK: -Private
     private let pageSize: Int = 20
     private let networkService: NetworkService
@@ -79,8 +94,8 @@ class ListPresenterImpl: ListPresenter {
         formatter.dateFormat = "dd-MM-yyyy HH:mm"
         return formatter
     }()
-    private unowned let view: ListView
-    private var items: [ListItemCellModel] = []
+    private unowned let view: CountryListView
+    private var items: [CountryCellModel] = []
     private var isLoadingFromDB: Bool = false
     
     private var hasMoreServer: Bool = true
@@ -98,11 +113,12 @@ class ListPresenterImpl: ListPresenter {
     }
     
     
-    private func buildCellModel(country: Country) -> ListItemCellModel {
+    private func buildCellModel(country: Country) -> CountryCellModel {
         let time = dateFormatter.string(from: country.time)
         let imageFuture = buildImageFuture(url: country.image)
         
-        let item = ListItemCellModel(
+        let item = CountryCellModel(
+            id: country.id,
             sortId: country.sortId,
             name: country.name,
             time: time,
@@ -164,7 +180,7 @@ class ListPresenterImpl: ListPresenter {
 }
 
 
-extension ListPresenterImpl: LocalStorageSubcriber {
+extension CountryListPresenterImpl: LocalStorageSubcriber {
     func onDataDidChange() {
         let itemsCount = max(pageSize, items.count)
         guard !isLoadingFromDB else {
