@@ -16,15 +16,13 @@ protocol NetworkService {
     /// - Parameters:
     ///   - queue: Очередь, на которой будет вызван callback
     ///   - completion: callback
-    func loadData(queue: DispatchQueue, completion: @escaping (Result<[CountryDTO], Error>) -> Void)
+    func loadData<T: Decodable>(queue: DispatchQueue, completion: @escaping (Result<[T], Error>) -> Void)
 }
 
 
 class NetworkServiceImpl: NetworkService {
     
-    func loadData(queue: DispatchQueue, completion: @escaping (Result<[CountryDTO], Error>) -> Void) {
-        let session = URLSession(configuration: .default)
-        
+    func loadData<T: Decodable>(queue: DispatchQueue, completion: @escaping (Result<[T], Error>) -> Void) {
         let dataTask = session.dataTask(with: apiUrl) { data, response, error in
             if let error = error {
                 queue.async {
@@ -34,7 +32,7 @@ class NetworkServiceImpl: NetworkService {
                 do {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .formatted(self.dateFormatter)
-                    let result = try decoder.decode([CountryDTO].self, from: data)
+                    let result = try decoder.decode([T].self, from: data)
                     queue.async {
                         completion(.success(result))
                     }
@@ -46,12 +44,12 @@ class NetworkServiceImpl: NetworkService {
             }
         }
         dataTask.resume()
-        // load
     }
     
     
     // MARK: -Private
     private let apiUrl = URL(string: "https://raw.githubusercontent.com/Softex-Group/task-mobile/master/test.json")!
+    private let session = URLSession(configuration: .default)
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

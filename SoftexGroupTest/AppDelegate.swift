@@ -7,8 +7,7 @@
 //
 
 import UIKit
-
-let networkService: NetworkService = NetworkServiceImpl()
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,14 +18,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow()
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        #if DEBUG
+        print("Realm location: \(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "")")
+        #endif
         
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                
+        let networkService: NetworkService = NetworkServiceImpl()
+        let localStorage: LocalStorage = LocalStorageImpl()
+        let countryListService: CountryListService = CountryListServiceImpl(
+            localStorage: localStorage,
+            networkService: networkService
+        )
         
         let listViewController = storyboard.instantiateViewController(withIdentifier: ListViewController.identifier) as! ListViewController        
         
         let presenter: ListPresenter = ListPresenterImpl(
             view: listViewController,
-            networkService: networkService
+            countryListService: countryListService
         )
         
         listViewController.presenter = presenter

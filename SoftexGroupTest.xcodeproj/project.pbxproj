@@ -8,13 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		30C55AF40FF882C9AC32320D /* Pods_SoftexGroupTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69EA4670D1F0362B3D631C96 /* Pods_SoftexGroupTest.framework */; };
+		9B85B73D228F1E8B00DC9B61 /* CountryListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B73C228F1E8B00DC9B61 /* CountryListService.swift */; };
+		9B85B740228F3EE900DC9B61 /* CountryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */; };
+		9B85B7432290030500DC9B61 /* CountryRemoteEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */; };
+		9B85B7472290111700DC9B61 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7462290111700DC9B61 /* Country.swift */; };
 		9BAB6D4F2289E90F00EEADEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D4E2289E90F00EEADEB /* AppDelegate.swift */; };
 		9BAB6D512289E90F00EEADEB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D502289E90F00EEADEB /* ListViewController.swift */; };
 		9BAB6D542289E90F00EEADEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BAB6D522289E90F00EEADEB /* Main.storyboard */; };
 		9BAB6D562289E91100EEADEB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BAB6D552289E91100EEADEB /* Assets.xcassets */; };
 		9BAB6D592289E91100EEADEB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BAB6D572289E91100EEADEB /* LaunchScreen.storyboard */; };
 		9BAB6D632289E94000EEADEB /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D622289E94000EEADEB /* NetworkService.swift */; };
-		9BAB6D662289E9A300EEADEB /* CountryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D652289E9A300EEADEB /* CountryModel.swift */; };
 		9BAB6D682289EA7300EEADEB /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D672289EA7300EEADEB /* LocalStorage.swift */; };
 		9BAB6D6B228B44D500EEADEB /* ListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D6A228B44D500EEADEB /* ListItemTableViewCell.swift */; };
 		9BAB6D6E228C79E200EEADEB /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D6D228C79E200EEADEB /* Future.swift */; };
@@ -24,6 +27,10 @@
 /* Begin PBXFileReference section */
 		44B3F1D9CD0BB8F0FC9A4717 /* Pods-SoftexGroupTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoftexGroupTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoftexGroupTest/Pods-SoftexGroupTest.debug.xcconfig"; sourceTree = "<group>"; };
 		69EA4670D1F0362B3D631C96 /* Pods_SoftexGroupTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoftexGroupTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B85B73C228F1E8B00DC9B61 /* CountryListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListService.swift; sourceTree = "<group>"; };
+		9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryEntity.swift; sourceTree = "<group>"; };
+		9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryRemoteEntity.swift; sourceTree = "<group>"; };
+		9B85B7462290111700DC9B61 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		9BAB6D4B2289E90F00EEADEB /* SoftexGroupTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoftexGroupTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BAB6D4E2289E90F00EEADEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9BAB6D502289E90F00EEADEB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -32,7 +39,6 @@
 		9BAB6D582289E91100EEADEB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9BAB6D5A2289E91100EEADEB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9BAB6D622289E94000EEADEB /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
-		9BAB6D652289E9A300EEADEB /* CountryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryModel.swift; sourceTree = "<group>"; };
 		9BAB6D672289EA7300EEADEB /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		9BAB6D6A228B44D500EEADEB /* ListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemTableViewCell.swift; sourceTree = "<group>"; };
 		9BAB6D6D228C79E200EEADEB /* Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
@@ -52,6 +58,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9B85B73E228F3ED300DC9B61 /* LocalStorage */ = {
+			isa = PBXGroup;
+			children = (
+				9BAB6D672289EA7300EEADEB /* LocalStorage.swift */,
+				9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */,
+			);
+			path = LocalStorage;
+			sourceTree = "<group>";
+		};
+		9B85B744229010CC00DC9B61 /* NetwrokService */ = {
+			isa = PBXGroup;
+			children = (
+				9BAB6D622289E94000EEADEB /* NetworkService.swift */,
+				9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */,
+			);
+			path = NetwrokService;
+			sourceTree = "<group>";
+		};
+		9B85B7452290110A00DC9B61 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9B85B7462290111700DC9B61 /* Country.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		9BAB6D422289E90F00EEADEB = {
 			isa = PBXGroup;
 			children = (
@@ -73,8 +105,8 @@
 		9BAB6D4D2289E90F00EEADEB /* SoftexGroupTest */ = {
 			isa = PBXGroup;
 			children = (
+				9B85B7452290110A00DC9B61 /* Models */,
 				9BAB6D6C228C79D400EEADEB /* Utils */,
-				9BAB6D642289E97200EEADEB /* Model */,
 				9BAB6D612289E92D00EEADEB /* UI */,
 				9BAB6D602289E92300EEADEB /* Services */,
 				9BAB6D4E2289E90F00EEADEB /* AppDelegate.swift */,
@@ -89,8 +121,9 @@
 		9BAB6D602289E92300EEADEB /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				9BAB6D622289E94000EEADEB /* NetworkService.swift */,
-				9BAB6D672289EA7300EEADEB /* LocalStorage.swift */,
+				9B85B744229010CC00DC9B61 /* NetwrokService */,
+				9B85B73E228F3ED300DC9B61 /* LocalStorage */,
+				9B85B73C228F1E8B00DC9B61 /* CountryListService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -103,14 +136,6 @@
 				9BAB6D6F228C83AC00EEADEB /* ListPresenter.swift */,
 			);
 			path = UI;
-			sourceTree = "<group>";
-		};
-		9BAB6D642289E97200EEADEB /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				9BAB6D652289E9A300EEADEB /* CountryModel.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		9BAB6D69228B44C100EEADEB /* Views */ = {
@@ -263,12 +288,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BAB6D512289E90F00EEADEB /* ListViewController.swift in Sources */,
+				9B85B73D228F1E8B00DC9B61 /* CountryListService.swift in Sources */,
 				9BAB6D6E228C79E200EEADEB /* Future.swift in Sources */,
 				9BAB6D70228C83AC00EEADEB /* ListPresenter.swift in Sources */,
+				9B85B7432290030500DC9B61 /* CountryRemoteEntity.swift in Sources */,
 				9BAB6D682289EA7300EEADEB /* LocalStorage.swift in Sources */,
 				9BAB6D6B228B44D500EEADEB /* ListItemTableViewCell.swift in Sources */,
+				9B85B7472290111700DC9B61 /* Country.swift in Sources */,
 				9BAB6D632289E94000EEADEB /* NetworkService.swift in Sources */,
-				9BAB6D662289E9A300EEADEB /* CountryModel.swift in Sources */,
+				9B85B740228F3EE900DC9B61 /* CountryEntity.swift in Sources */,
 				9BAB6D4F2289E90F00EEADEB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct CountryDTO: Codable {
+struct CountryRemoteEntity: Codable {
     let id: UUID
     let time: Date
     let name: String
@@ -19,5 +19,18 @@ struct CountryDTO: Codable {
         case time = "Time"
         case name = "Name"
         case image = "Image"
+    }    
+}
+
+
+extension CountryRemoteEntity {
+    var county: Country {
+        return Country(
+            id: id,
+            time: time,
+            name: name,
+            image: image,
+            sortId: -1
+        )        
     }
 }

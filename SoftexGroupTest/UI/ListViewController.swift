@@ -9,6 +9,7 @@
 import UIKit
 
 struct ListItemCellModel {
+    let sortId: Int
     let name: String
     let time: String
     let image: Future<UIImage>?
@@ -30,11 +31,12 @@ class ListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.tableFooterView = loadingView
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        presenter.loadData()
+        presenter.loadNextPage()
     }
     
     
@@ -53,12 +55,27 @@ class ListViewController: UITableViewController {
         cell.setup(model: model)
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == (presenter.itemsCount - 1) {
+            presenter.loadNextPage()
+        }
+    }
+    
+    // MARK: -Private
+    private lazy var loadingView: UIView = {
+        let spinner = UIActivityIndicatorView(style: .gray)
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(44))
+        return spinner
+    }()
 }
 
 
 extension ListViewController: ListView {
     func render() {
         tableView.reloadData()
+        loadingView.isHidden = !presenter.hasMore
     }
 }
 
