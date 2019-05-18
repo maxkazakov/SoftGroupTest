@@ -9,6 +9,7 @@
 import Kingfisher
 
 
+/// Протокол презентера списка стран
 protocol CountryListPresenter: class {
     /// Загрузить следующую страницу
     func loadNextPage()
@@ -75,8 +76,8 @@ class CountryListPresenterImpl: CountryListPresenter {
         // Инициируем загрузку с сервера только 1 раз, т.к.
         // пагинация в API отсутствует
         if hasMoreServer {
-            hasMoreServer = false
-            loadFromServer { error in
+            loadFromServer { [weak self] error in
+                self?.hasMoreServer = false
                 if let error = error {
                     print(error)
                 }
@@ -97,6 +98,7 @@ class CountryListPresenterImpl: CountryListPresenter {
     private unowned let view: CountryListView
     private var items: [CountryCellModel] = []
     private var isLoadingFromDB: Bool = false
+    private var isLoadingFromServer: Bool = false
     
     private var hasMoreServer: Bool = true
     private var hasMoreDB: Bool = true
@@ -166,21 +168,31 @@ class CountryListPresenterImpl: CountryListPresenter {
     
     
     private func loadFromServer(completion: @escaping (Error?) -> Void) {
-        networkService.loadData(queue: .main) { (result: Result<[CountryRemoteEntity], Error>) in
+        guard !isLoadingFromServer else {
+            return
+        }
+        isLoadingFromServer = true
+        networkService.loadData(queue: .main) { [weak self] (result: Result<[CountryRemoteEntity], Error>) in
+            guard let strong = self else {
+                return
+            }
             switch result {
             case .success(let countriesRemote):
                 let countries = countriesRemote.map { $0.county }
-                self.localStorage.save(items: countries)
+                strong.localStorage.save(items: countries)
                 completion(nil)
             case .failure(let error):
                 completion(error)
             }
+            strong.isLoadingFromServer = false
         }
     }
 }
 
 
 extension CountryListPresenterImpl: LocalStorageSubcriber {
+    // Слушаем изменения в БД.
+    // TODO: Здесь в дальнейшем можно получать список изменений и анимированно применять их.
     func onDataDidChange() {
         let itemsCount = max(pageSize, items.count)
         guard !isLoadingFromDB else {

@@ -23,7 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                
+        
+        // DI
         let networkService: NetworkService = NetworkServiceImpl()
         let localStorage: LocalStorage = LocalStorageImpl()
         

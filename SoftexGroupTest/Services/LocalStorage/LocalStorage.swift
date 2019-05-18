@@ -9,16 +9,33 @@
 import RealmSwift
 
 
+/// Подписчик на изменения в БД
 protocol LocalStorageSubcriber: class {
     func onDataDidChange()
 }
 
+/// Интерфейс работы с БД
 protocol LocalStorage: class {
     
+    /// Удалить по объект id
+    ///
+    /// - Parameter id: первичный ключ объекта
     func delete(id: UUID)
     
+    /// Сохранить список стран в БД
+    ///
+    /// - Parameter items: список стран
     func save(items: [Country])
     
+    
+    /// Загрузить список стран
+    ///
+    /// - Parameters:
+    ///   - predicate: предикат запроса
+    ///   - sortKeyPath: ключ сортировки
+    ///   - count: количество загружаемых объектов
+    ///   - queue: очередь для вызова completion
+    ///   - completion: callback
     func load(predicate: NSPredicate, sortKeyPath: String, count: Int, queue: DispatchQueue, completion: @escaping ([Country]) -> Void)
     
     func subscribe(subscriber: LocalStorageSubcriber)
@@ -117,6 +134,8 @@ class LocalStorageImpl: LocalStorage {
     
     
     private func performAsync(block: @escaping (Realm) -> Void) {
+        // TODO: сделать всю работу с БД на бекграунд потоке.
+        // Код ниже падает. В рамках тестового решил не разбираться
 //        realmQueue.async { [weak self] in
 //            guard let strong = self else {
 //                return

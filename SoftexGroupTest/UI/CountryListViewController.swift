@@ -17,7 +17,9 @@ struct CountryCellModel {
 }
 
 
+/// Протокол вью списка стран
 protocol CountryListView: class {
+    /// Отрисовать список
     func render()
 }
 
