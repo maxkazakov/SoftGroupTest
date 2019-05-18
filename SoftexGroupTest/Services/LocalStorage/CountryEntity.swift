@@ -32,7 +32,7 @@ class CountryEntity: Object {
     func set(country: Country) {
         self.time = country.time
         self.name = country.name
-        self.imageUrl = country.image?.absoluteString        
+        self.imageUrl = country.image?.absoluteString
     }
     
     override static func primaryKey() -> String? {

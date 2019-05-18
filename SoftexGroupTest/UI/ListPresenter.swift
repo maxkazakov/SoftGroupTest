@@ -29,10 +29,12 @@ protocol ListPresenter: class {
 
 class ListPresenterImpl: ListPresenter {
     
-    init(view: ListView, countryListService: CountryListService) {
-        self.countryListService = countryListService
+    init(view: ListView, networkService: NetworkService, localStorage: LocalStorage) {
+        self.networkService = networkService
+        self.localStorage = localStorage
         self.view = view
-        countryListService.subscribe(subcriber: self)
+        
+        localStorage.subscribe(subscriber: self)
     }
     
     func loadNextPage() {
@@ -46,7 +48,7 @@ class ListPresenterImpl: ListPresenter {
         // пагинация в API отсутствует
         if hasMoreServer {
             hasMoreServer = false
-            countryListService.loadFromServer { error in
+            loadFromServer { error in
                 if let error = error {
                     print(error)
                 }
@@ -69,7 +71,9 @@ class ListPresenterImpl: ListPresenter {
     
     // MARK: -Private
     private let pageSize: Int = 20
-    private let countryListService: CountryListService
+    private let networkService: NetworkService
+    private let localStorage: LocalStorage
+    
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd-MM-yyyy HH:mm"
@@ -129,24 +133,46 @@ class ListPresenterImpl: ListPresenter {
             return
         }
         isLoadingFromDB = true
-        countryListService.getCountries(fromSortKey: sortKey, pageSize: pageSize + 1) { [weak self] countries in
+        loadFromDB(fromSortKey: sortKey, pageSize: pageSize + 1) { [weak self] countries in
             guard let strong = self else { return }
             strong.hasMoreDB = countries.count > strong.pageSize
             strong.onNewPageDidLoad(countries: countries)
             strong.isLoadingFromDB = false
         }
     }
+    
+    
+    private func loadFromDB(fromSortKey sortKey: Int?, pageSize: Int, completion: @escaping ([Country]) -> Void) {
+        let lastSortKey = sortKey ?? -1
+        let predicate = NSPredicate(format: "sortId > \(lastSortKey)")
+        localStorage.load(predicate: predicate, sortKeyPath: "sortId", count: pageSize, queue: .main, completion: completion)
+    }
+    
+    
+    private func loadFromServer(completion: @escaping (Error?) -> Void) {
+        networkService.loadData(queue: .main) { (result: Result<[CountryRemoteEntity], Error>) in
+            switch result {
+            case .success(let countriesRemote):
+                let countries = countriesRemote.map { $0.county }
+                self.localStorage.save(items: countries)
+                completion(nil)
+            case .failure(let error):
+                completion(error)
+            }
+        }
+    }
 }
 
 
-extension ListPresenterImpl: CountryListServiceSubscriber {
-    func onDataDidiChange() {
+extension ListPresenterImpl: LocalStorageSubcriber {
+    func onDataDidChange() {
         let itemsCount = max(pageSize, items.count)
         guard !isLoadingFromDB else {
             return
         }
         isLoadingFromDB = true
-        countryListService.getCountries(fromSortKey: nil, pageSize: itemsCount + 1) { [weak self] countries in
+        
+        loadFromDB(fromSortKey: nil, pageSize: itemsCount + 1) { [weak self] countries in
             guard let strong = self else { return }
             strong.hasMoreDB = countries.count >= itemsCount
             strong.onNewDidDataUpdated(countries: countries)

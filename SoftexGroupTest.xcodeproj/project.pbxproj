@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		30C55AF40FF882C9AC32320D /* Pods_SoftexGroupTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69EA4670D1F0362B3D631C96 /* Pods_SoftexGroupTest.framework */; };
-		9B85B73D228F1E8B00DC9B61 /* CountryListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B73C228F1E8B00DC9B61 /* CountryListService.swift */; };
 		9B85B740228F3EE900DC9B61 /* CountryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */; };
 		9B85B7432290030500DC9B61 /* CountryRemoteEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */; };
 		9B85B7472290111700DC9B61 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7462290111700DC9B61 /* Country.swift */; };
@@ -27,7 +26,6 @@
 /* Begin PBXFileReference section */
 		44B3F1D9CD0BB8F0FC9A4717 /* Pods-SoftexGroupTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoftexGroupTest.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SoftexGroupTest/Pods-SoftexGroupTest.debug.xcconfig"; sourceTree = "<group>"; };
 		69EA4670D1F0362B3D631C96 /* Pods_SoftexGroupTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoftexGroupTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9B85B73C228F1E8B00DC9B61 /* CountryListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListService.swift; sourceTree = "<group>"; };
 		9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryEntity.swift; sourceTree = "<group>"; };
 		9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryRemoteEntity.swift; sourceTree = "<group>"; };
 		9B85B7462290111700DC9B61 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 			children = (
 				9B85B744229010CC00DC9B61 /* NetwrokService */,
 				9B85B73E228F3ED300DC9B61 /* LocalStorage */,
-				9B85B73C228F1E8B00DC9B61 /* CountryListService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -288,7 +285,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BAB6D512289E90F00EEADEB /* ListViewController.swift in Sources */,
-				9B85B73D228F1E8B00DC9B61 /* CountryListService.swift in Sources */,
 				9BAB6D6E228C79E200EEADEB /* Future.swift in Sources */,
 				9BAB6D70228C83AC00EEADEB /* ListPresenter.swift in Sources */,
 				9B85B7432290030500DC9B61 /* CountryRemoteEntity.swift in Sources */,
