@@ -101,50 +101,30 @@ class LocalStorageImpl: LocalStorage {
     // MARK: -Private
     private weak var subscriber: LocalStorageSubcriber?
     private let realmQueue = DispatchQueue(label: "realmQueue")
-    private var realm: Realm!
     private var token: NotificationToken?
     
     
     private func subscribe() {
-        performAsync { [weak self] realm in
-            guard let strong = self else {
+        // Подписываться на realm можно только на потоках с runLoop, для простоты использую main
+        let realm = try! Realm()
+        let results = realm.objects(CountryEntity.self)
+        self.token = results.observe { [weak self] changes in
+            switch changes {
+            case .initial:
                 return
-            }
-            let results = realm.objects(CountryEntity.self)
-            strong.token = results.observe { [weak self] changes in
-                switch changes {
-                case .initial:
-                    return
-                case .error(let error):
-                    fatalError("\(error)")
-                default:
-                    self?.subscriber?.onDataDidChange()
-                }
+            case .error(let error):
+                fatalError("\(error)")
+            default:
+                self?.subscriber?.onDataDidChange()
             }
         }
-    }
-    
-    
-    private func ensureRealm() {
-        guard realm == nil else {
-            return
-        }
-        self.realm = try! Realm()
     }
     
     
     private func performAsync(block: @escaping (Realm) -> Void) {
-        // TODO: сделать всю работу с БД на бекграунд потоке.
-        // Код ниже падает. В рамках тестового решил не разбираться
-//        realmQueue.async { [weak self] in
-//            guard let strong = self else {
-//                return
-//            }
-//            strong.ensureRealm()
-//            block(strong.realm)
-//        }
-        
-        ensureRealm()
-        block(realm)
+        realmQueue.async {
+            let realm = try! Realm()
+            block(realm)
+        }
     }
 }
