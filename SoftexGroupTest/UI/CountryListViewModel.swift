@@ -1,5 +1,5 @@
 //
-//  ListPresenter.swift
+//  CountryListViewModel.swift
 //  SoftexGroupTest
 //
 //  Created by Максим Казаков on 15/05/2019.
@@ -7,24 +7,20 @@
 //
 
 import Kingfisher
+import RxSwift
 
 
 /// Протокол презентера списка стран
-protocol CountryListPresenter: class {
+protocol CountryListViewModel: class {
+    
     /// Загрузить следующую страницу
-    func loadNextPage()
+    func loadNextPage(row: Int)
     
-    /// Количество моделей
-    var itemsCount: Int { get }
-    
-    /// Получить модель ячейки по индексу
-    ///
-    /// - Parameter row: индекс
-    /// - Returns: модель ячейки
-    func getItem(at row: Int) -> CountryCellModel
+    /// Список стран
+    var dataSource: Observable<[CountryCellModel]> { get }
     
     /// Признак — есть ли еще данные для загрузки
-    var hasMore: Bool { get }
+    var hasMore: Observable<Bool> { get }
     
     /// Удалить объект
     ///
@@ -33,51 +29,43 @@ protocol CountryListPresenter: class {
 }
 
 
-class CountryListPresenterImpl: CountryListPresenter {
+class CountryListViewModelImpl: CountryListViewModel {
     
-    init(view: CountryListView, networkService: NetworkService, localStorage: LocalStorage) {
+    init(networkService: NetworkService, localStorage: LocalStorage) {
         self.networkService = networkService
         self.localStorage = localStorage
-        self.view = view
+                
+        hasMore = Observable.combineLatest(hasMoreServer.asObservable(), hasMoreDB.asObservable()) { $0 || $1 }
+        dataSource = items.asObservable()
         
         localStorage.subscribe(subscriber: self)
     }
     
     
     // MARK: -ListPresenter
-    var hasMore: Bool {
-        return hasMoreServer || hasMoreDB
-    }
+    let hasMore: Observable<Bool>
     
-    
-    func getItem(at row: Int) -> CountryCellModel {
-        return items[row]
-    }
-    
-    
-    var itemsCount: Int {
-        return items.count
-    }
-    
+    let dataSource: Observable<[CountryCellModel]>
     
     func delete(idx: Int) {
-        let country = items[idx]
+        let country = items.value[idx]
         localStorage.delete(id: country.id)
     }
     
     
-    func loadNextPage() {
-        guard hasMore else {
+    func loadNextPage(row: Int) {
+        guard hasMoreDB.value || hasMoreServer.value,
+            row == (items.value.count - 1) else {
             return
         }
         // Загружаем страницу из БД
-        loadPage(sortKey: items.last?.sortId)
+        loadPage(sortKey: items.value.last?.sortId)
         
         // Инициируем загрузку с сервера только 1 раз, т.к.
         // пагинация в API отсутствует
-        if hasMoreServer {
+        if hasMoreServer.value {
             loadFromServer { [weak self] error in
-                self?.hasMoreServer = false
+                self?.hasMoreServer.value = false
                 if let error = error {
                     print(error)
                 }
@@ -95,23 +83,21 @@ class CountryListPresenterImpl: CountryListPresenter {
         formatter.dateFormat = "dd-MM-yyyy HH:mm"
         return formatter
     }()
-    private unowned let view: CountryListView
-    private var items: [CountryCellModel] = []
+    private let items: Variable<[CountryCellModel]> = Variable([])
+    
     private var isLoadingFromDB: Bool = false
     private var isLoadingFromServer: Bool = false
     
-    private var hasMoreServer: Bool = true
-    private var hasMoreDB: Bool = true
+    private var hasMoreServer = Variable<Bool>(true)
+    private var hasMoreDB = Variable<Bool>(true)
     
     
     private func onNewPageDidLoad(countries: [Country]) {
-        items = items + countries.map(buildCellModel)
-        view.render()
+        items.value = items.value + countries.map(buildCellModel)
     }
     
     private func onNewDidDataUpdated(countries: [Country]) {
-        items = countries.map(buildCellModel)
-        view.render()
+        items.value = countries.map(buildCellModel)
     }
     
     
@@ -153,7 +139,8 @@ class CountryListPresenterImpl: CountryListPresenter {
         isLoadingFromDB = true
         loadFromDB(fromSortKey: sortKey, pageSize: pageSize + 1) { [weak self] countries in
             guard let strong = self else { return }
-            strong.hasMoreDB = countries.count > strong.pageSize
+            let a = countries.count > strong.pageSize
+            strong.hasMoreDB.value = a
             strong.onNewPageDidLoad(countries: countries)
             strong.isLoadingFromDB = false
         }
@@ -190,11 +177,12 @@ class CountryListPresenterImpl: CountryListPresenter {
 }
 
 
-extension CountryListPresenterImpl: LocalStorageSubcriber {
-    // Слушаем изменения в БД.
+extension CountryListViewModelImpl: LocalStorageSubcriber {
+    
     // TODO: Здесь в дальнейшем можно получать список изменений и анимированно применять их.
+    /// Слушаем изменения в БД.
     func onDataDidChange() {
-        let itemsCount = max(pageSize, items.count)
+        let itemsCount = max(pageSize, items.value.count)
         guard !isLoadingFromDB else {
             return
         }
@@ -202,7 +190,7 @@ extension CountryListPresenterImpl: LocalStorageSubcriber {
         
         loadFromDB(fromSortKey: nil, pageSize: itemsCount + 1) { [weak self] countries in
             guard let strong = self else { return }
-            strong.hasMoreDB = countries.count >= itemsCount
+            strong.hasMoreDB.value = countries.count >= itemsCount
             strong.onNewDidDataUpdated(countries: countries)
             strong.isLoadingFromDB = false
         }

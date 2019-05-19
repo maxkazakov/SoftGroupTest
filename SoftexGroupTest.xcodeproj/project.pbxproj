@@ -11,6 +11,7 @@
 		9B85B740228F3EE900DC9B61 /* CountryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */; };
 		9B85B7432290030500DC9B61 /* CountryRemoteEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */; };
 		9B85B7472290111700DC9B61 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7462290111700DC9B61 /* Country.swift */; };
+		9B85B7492291612E00DC9B61 /* CountryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B85B7482291612E00DC9B61 /* CountryListViewModel.swift */; };
 		9BAB6D4F2289E90F00EEADEB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D4E2289E90F00EEADEB /* AppDelegate.swift */; };
 		9BAB6D512289E90F00EEADEB /* CountryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D502289E90F00EEADEB /* CountryListViewController.swift */; };
 		9BAB6D542289E90F00EEADEB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BAB6D522289E90F00EEADEB /* Main.storyboard */; };
@@ -20,7 +21,6 @@
 		9BAB6D682289EA7300EEADEB /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D672289EA7300EEADEB /* LocalStorage.swift */; };
 		9BAB6D6B228B44D500EEADEB /* ListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D6A228B44D500EEADEB /* ListItemTableViewCell.swift */; };
 		9BAB6D6E228C79E200EEADEB /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D6D228C79E200EEADEB /* Future.swift */; };
-		9BAB6D70228C83AC00EEADEB /* CountryListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BAB6D6F228C83AC00EEADEB /* CountryListPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +29,7 @@
 		9B85B73F228F3EE900DC9B61 /* CountryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryEntity.swift; sourceTree = "<group>"; };
 		9B85B7422290030500DC9B61 /* CountryRemoteEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryRemoteEntity.swift; sourceTree = "<group>"; };
 		9B85B7462290111700DC9B61 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		9B85B7482291612E00DC9B61 /* CountryListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryListViewModel.swift; sourceTree = "<group>"; };
 		9BAB6D4B2289E90F00EEADEB /* SoftexGroupTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoftexGroupTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9BAB6D4E2289E90F00EEADEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9BAB6D502289E90F00EEADEB /* CountryListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListViewController.swift; sourceTree = "<group>"; };
@@ -40,7 +41,6 @@
 		9BAB6D672289EA7300EEADEB /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
 		9BAB6D6A228B44D500EEADEB /* ListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemTableViewCell.swift; sourceTree = "<group>"; };
 		9BAB6D6D228C79E200EEADEB /* Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
-		9BAB6D6F228C83AC00EEADEB /* CountryListPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryListPresenter.swift; sourceTree = "<group>"; };
 		B44EBD99338B7456C798034F /* Pods-SoftexGroupTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoftexGroupTest.release.xcconfig"; path = "Pods/Target Support Files/Pods-SoftexGroupTest/Pods-SoftexGroupTest.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,9 +128,9 @@
 		9BAB6D612289E92D00EEADEB /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				9BAB6D69228B44C100EEADEB /* Views */,
+				9B85B7482291612E00DC9B61 /* CountryListViewModel.swift */,
 				9BAB6D502289E90F00EEADEB /* CountryListViewController.swift */,
-				9BAB6D6F228C83AC00EEADEB /* CountryListPresenter.swift */,
+				9BAB6D69228B44C100EEADEB /* Views */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -247,12 +247,18 @@
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -286,12 +292,12 @@
 			files = (
 				9BAB6D512289E90F00EEADEB /* CountryListViewController.swift in Sources */,
 				9BAB6D6E228C79E200EEADEB /* Future.swift in Sources */,
-				9BAB6D70228C83AC00EEADEB /* CountryListPresenter.swift in Sources */,
 				9B85B7432290030500DC9B61 /* CountryRemoteEntity.swift in Sources */,
 				9BAB6D682289EA7300EEADEB /* LocalStorage.swift in Sources */,
 				9BAB6D6B228B44D500EEADEB /* ListItemTableViewCell.swift in Sources */,
 				9B85B7472290111700DC9B61 /* Country.swift in Sources */,
 				9BAB6D632289E94000EEADEB /* NetworkService.swift in Sources */,
+				9B85B7492291612E00DC9B61 /* CountryListViewModel.swift in Sources */,
 				9B85B740228F3EE900DC9B61 /* CountryEntity.swift in Sources */,
 				9BAB6D4F2289E90F00EEADEB /* AppDelegate.swift in Sources */,
 			);

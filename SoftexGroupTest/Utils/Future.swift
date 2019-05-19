@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+// TODO: Можно заменить на Observable
 class Future<T> {
     
     func get(onSuccess: @escaping (T) -> Void, onError: ((Error) -> Void)? = nil) {

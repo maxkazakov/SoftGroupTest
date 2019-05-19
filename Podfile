@@ -8,4 +8,6 @@ target 'SoftexGroupTest' do
   # Pods for SoftexGroupTest
   pod 'RealmSwift'
   pod 'Kingfisher'
+  pod 'RxSwift'
+  pod 'RxCocoa'
 end

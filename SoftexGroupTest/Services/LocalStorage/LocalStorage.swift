@@ -28,7 +28,7 @@ protocol LocalStorage: class {
     func save(items: [Country])
     
     
-    /// Загрузить список стран
+    /// Загрузить список стран из БД
     ///
     /// - Parameters:
     ///   - predicate: предикат запроса

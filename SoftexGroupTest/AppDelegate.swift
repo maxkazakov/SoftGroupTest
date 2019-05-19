@@ -30,13 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let listViewController = storyboard.instantiateViewController(withIdentifier: CountryListViewController.identifier) as! CountryListViewController        
         
-        let presenter: CountryListPresenter = CountryListPresenterImpl(
-            view: listViewController,
+        let viewModel: CountryListViewModel = CountryListViewModelImpl(
             networkService: networkService,
             localStorage: localStorage
         )
         
-        listViewController.presenter = presenter
+        listViewController.viewModel = viewModel
         
         window.rootViewController = UINavigationController(rootViewController: listViewController) 
         window.makeKeyAndVisible()

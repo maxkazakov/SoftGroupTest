@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 struct CountryCellModel {
     let id: UUID
@@ -17,74 +19,70 @@ struct CountryCellModel {
 }
 
 
-/// Протокол вью списка стран
-protocol CountryListView: class {
-    /// Отрисовать список
-    func render()
-}
-
-
 class CountryListViewController: UITableViewController {
     
     class var identifier: String {
         return String(describing: self)
     }
     
-    var presenter: CountryListPresenter!
+    var viewModel: CountryListViewModel!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.tableFooterView = loadingView
+        tableView.delegate = nil
+        tableView.dataSource = nil
+        
+        bind()
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        presenter.loadNextPage()
+        super.viewWillAppear(animated)                
+        viewModel.loadNextPage(row: -1)
     }
     
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return presenter.itemsCount
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ListItemTableViewCell.identifier) as! ListItemTableViewCell
-        let model = presenter.getItem(at: indexPath.row)
-        cell.setup(model: model)
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == (presenter.itemsCount - 1) {
-            presenter.loadNextPage()
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            presenter.delete(idx: indexPath.row)            
-        }
-    }
     
     // MARK: -Private
+    private let disposeBag = DisposeBag()
     private lazy var loadingView: UIView = {
         let spinner = UIActivityIndicatorView(style: .gray)
         spinner.startAnimating()
         spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(44))
         return spinner
     }()
-}
+    
+    /// Привязка view к viewModel 
+    private func bind() {
+        viewModel.hasMore.subscribe(
+            onNext: { [weak self] hasMore in
+                self?.loadingView.isHidden = !hasMore
+            }).disposed(by: disposeBag)
 
-
-extension CountryListViewController: CountryListView {
-    func render() {
-        tableView.reloadData()
-        loadingView.isHidden = !presenter.hasMore
+        viewModel.dataSource.bind(
+            to: tableView.rx.items(
+                cellIdentifier: ListItemTableViewCell.identifier,
+                cellType: ListItemTableViewCell.self
+            )) { row, element, cell in
+                cell.setup(model: element)
+            }
+            .disposed(by: disposeBag)
+        
+        tableView.rx
+            .willDisplayCell
+            .subscribe(onNext: { [weak self] cell, indexPath in
+                guard let strong = self else {
+                    return
+                }
+                strong.viewModel.loadNextPage(row: indexPath.row)
+            })
+            .disposed(by: disposeBag)
+        
+        tableView.rx.itemDeleted
+            .subscribe(onNext: { [weak self] indexPath in
+                self?.viewModel.delete(idx: indexPath.row)
+            }).disposed(by: disposeBag)
     }
 }
 
